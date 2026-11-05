@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   server: {
@@ -6,6 +6,6 @@ export default defineConfig({
     // localhost, et le port n'est pas joignable hors du conteneur
     host: true,
     // Les appels /api partent vers l'API, dans le même conteneur
-    proxy: { "/api": "http://localhost:3000" },
+    proxy: { '/api': 'http://localhost:3000' },
   },
 });
