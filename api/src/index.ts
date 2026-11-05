@@ -60,6 +60,6 @@ async function ask(question: string): Promise<string> {
   const data = await response.json();
   return data.choices[0].message.content;
 }
-
+// commentaire random pour tester un push direct
 // Sans adresse, Node écoute sur toutes les interfaces : joignable hors du conteneur
 app.listen(PORT, () => console.log(`API sur http://localhost:${PORT}`));
