@@ -19,7 +19,7 @@ async function refresh() {
     }),
   );
 }
-
+//modif
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
   const question = new FormData(form).get('question');
