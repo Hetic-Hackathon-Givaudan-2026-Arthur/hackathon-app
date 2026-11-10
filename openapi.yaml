@@ -1,0 +1,34 @@
+openapi: 3.0.3
+
+info:
+  title: Givaudan Hackathon groupe 2
+  version: 0.1.0
+  description: >
+    Contrat initial de l'API du projet .
+    Les fonctionnalités métier seront définies ultérieurement
+    avec l'équipe Data/IA.
+
+paths:
+  /health:
+    get:
+      summary: Vérifier l'état du service
+      description: Retourne l'état de disponibilité du service.
+      operationId: getHealth
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Le service est opérationnel.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - status
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - ok
+              example:
+                status: ok
