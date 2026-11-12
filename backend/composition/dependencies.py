@@ -6,6 +6,10 @@ from application.ports.analysis_model import AnalysisModel
 from application.ports.task_queue import TaskQueue
 from domain.analysis.entities import AnalysisResult, Batch, VisualTask
 from domain.analysis.policies import BatchPolicy
+from llm.llm2_visual.adapter import LLM2Adapter
+from llm.llm2_visual.service import LLM2VisualService
+import json
+from pipelines.visual.rag import PassthroughRAGRetriever
 
 logger = logging.getLogger(__name__)
 
@@ -19,6 +23,14 @@ class LocalAnalysisModel(AnalysisModel):
             batch.session_id,
             len(batch.segments),
         )
+
+
+class PassthroughLLM2Client:
+    """Emulate a direct LLM2 provider while preserving its completion contract."""
+
+    async def complete(self, messages: list[dict[str, str]]) -> str:
+        payload = messages[-1]["content"]
+        return json.dumps({"query": payload})
         text = " ".join(segment.text for segment in batch.segments)
         logger.info("analysis.completed session_id=%s", batch.session_id)
         return AnalysisResult(
@@ -118,3 +130,8 @@ def build_local_orchestrator(ws_manager: WebSocketManager) -> Orchestrator:
         result_delivery=OutboxDelivery(InMemoryOutbox(), ws_manager),
         batch_policy=BatchPolicy(),
     )
+
+
+def build_local_visual_model() -> LLM2VisualService:
+    """Compose LLM2 with the local provider-shaped client for development."""
+    return LLM2VisualService(LLM2Adapter(PassthroughLLM2Client()))
