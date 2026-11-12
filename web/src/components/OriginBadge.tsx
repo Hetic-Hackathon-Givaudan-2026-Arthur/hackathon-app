@@ -1,7 +1,6 @@
-
-import type { Origin } from '../types/moodboard'
-import { ORIGIN_LABELS } from '../constants/origins'
-import { Icon } from './Icon'
+import type { Origin } from '../types/moodboard';
+import { ORIGIN_LABELS } from '../constants/origins';
+import { Icon } from './Icon';
 
 /** Étiquette d'origine : libellé + icône + style propres à chaque origine (jamais la couleur seule). */
 export function OriginBadge({ origin }: { origin: Origin }) {
@@ -14,5 +13,5 @@ export function OriginBadge({ origin }: { origin: Origin }) {
       />
       {ORIGIN_LABELS[origin]}
     </span>
-  )
+  );
 }

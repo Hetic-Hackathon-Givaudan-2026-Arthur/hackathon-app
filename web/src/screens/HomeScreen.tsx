@@ -1,61 +1,60 @@
-
-import { useCallback, useEffect, useState } from 'react'
-import { Icon } from '../components/Icon'
-import { fetchTodaysMeetings } from '../services/crm'
-import { SCALE_LABELS, SECTOR_LABELS } from '../types/client'
-import type { ClientDraft, CrmClient } from '../types/client'
+import { useCallback, useEffect, useState } from 'react';
+import { Icon } from '../components/Icon';
+import { fetchTodaysMeetings } from '../services/crm';
+import { SCALE_LABELS, SECTOR_LABELS } from '../types/client';
+import type { ClientDraft, CrmClient } from '../types/client';
 
 interface HomeScreenProps {
-  draft: ClientDraft
-  onChange: (draft: ClientDraft) => void
-  onStart: () => void
+  draft: ClientDraft;
+  onChange: (draft: ClientDraft) => void;
+  onStart: () => void;
 }
 
-type SyncState = 'loading' | 'ready' | 'error'
+type SyncState = 'loading' | 'ready' | 'error';
 
 /** Écran de préparation : la fiche client vient du CRM, jamais saisie à la main. */
 export function HomeScreen({ draft, onChange, onStart }: HomeScreenProps) {
-  const [sync, setSync] = useState<SyncState>('loading')
-  const [meetings, setMeetings] = useState<CrmClient[]>([])
+  const [sync, setSync] = useState<SyncState>('loading');
+  const [meetings, setMeetings] = useState<CrmClient[]>([]);
 
   // Rechargement manuel depuis le bouton "Actualiser".
   const load = useCallback(() => {
-    setSync('loading')
+    setSync('loading');
 
     void fetchTodaysMeetings().then(
       (list) => {
-        setMeetings(list)
-        setSync('ready')
+        setMeetings(list);
+        setSync('ready');
       },
       () => {
-        setSync('error')
+        setSync('error');
       },
-    )
-  }, [])
+    );
+  }, []);
 
   // Chargement initial du CRM.
   // Les mises à jour d'état ont lieu dans les callbacks asynchrones.
   useEffect(() => {
-    let cancelled = false
+    let cancelled = false;
 
     void fetchTodaysMeetings().then(
       (list) => {
-        if (cancelled) return
+        if (cancelled) return;
 
-        setMeetings(list)
-        setSync('ready')
+        setMeetings(list);
+        setSync('ready');
       },
       () => {
-        if (cancelled) return
+        if (cancelled) return;
 
-        setSync('error')
+        setSync('error');
       },
-    )
+    );
 
     return () => {
-      cancelled = true
-    }
-  }, [])
+      cancelled = true;
+    };
+  }, []);
 
   function select(client: CrmClient) {
     onChange({
@@ -68,26 +67,24 @@ export function HomeScreen({ draft, onChange, onStart }: HomeScreenProps) {
       subject: client.subject,
       crmId: client.id,
       consent: false,
-    })
+    });
   }
 
-  const selected = draft.crmId !== null
-  const canStart = selected && draft.consent
+  const selected = draft.crmId !== null;
+  const canStart = selected && draft.consent;
 
   const rows: [string, string][] = selected
     ? [
         [
           'Interlocuteur',
-          [draft.contactName, draft.contactRole]
-            .filter(Boolean)
-            .join(' · '),
+          [draft.contactName, draft.contactRole].filter(Boolean).join(' · '),
         ],
         ['Région', draft.region],
         ['Type de client', draft.scale ? SCALE_LABELS[draft.scale] : ''],
         ['Secteur', draft.sector ? SECTOR_LABELS[draft.sector] : ''],
         ['Objet', draft.subject],
       ]
-    : []
+    : [];
 
   return (
     <div className="desktop-scene">
@@ -142,8 +139,7 @@ export function HomeScreen({ draft, onChange, onStart }: HomeScreenProps) {
               <span className="sync-label">
                 <span className={`sync-dot ${sync}`} />
                 {sync === 'loading' && 'SYNCHRONISATION DU CRM…'}
-                {sync === 'ready' &&
-                  'CRM SYNCHRONISÉ · DONNÉES FICTIVES'}
+                {sync === 'ready' && 'CRM SYNCHRONISÉ · DONNÉES FICTIVES'}
                 {sync === 'error' && 'CRM INJOIGNABLE'}
               </span>
 
@@ -179,14 +175,10 @@ export function HomeScreen({ draft, onChange, onStart }: HomeScreenProps) {
                     <button
                       type="button"
                       aria-pressed={draft.crmId === client.id}
-                      className={
-                        draft.crmId === client.id ? 'is-selected' : ''
-                      }
+                      className={draft.crmId === client.id ? 'is-selected' : ''}
                       onClick={() => select(client)}
                     >
-                      <span className="meeting-time">
-                        {client.meetingTime}
-                      </span>
+                      <span className="meeting-time">{client.meetingTime}</span>
 
                       <span className="crm-item-main">
                         <strong>{client.company}</strong>
@@ -195,10 +187,7 @@ export function HomeScreen({ draft, onChange, onStart }: HomeScreenProps) {
                         </span>
                       </span>
 
-                      <span
-                        className="meeting-check"
-                        aria-hidden="true"
-                      >
+                      <span className="meeting-check" aria-hidden="true">
                         <Icon name="check" size={13} />
                       </span>
                     </button>
@@ -261,8 +250,8 @@ export function HomeScreen({ draft, onChange, onStart }: HomeScreenProps) {
                 <span>
                   <strong>Le client a donné son accord</strong>
                   <span>
-                    Pour l’écoute pendant le rendez-vous. Un indicateur
-                    reste visible à l’écran.
+                    Pour l’écoute pendant le rendez-vous. Un indicateur reste
+                    visible à l’écran.
                   </span>
                 </span>
               </label>
@@ -283,5 +272,5 @@ export function HomeScreen({ draft, onChange, onStart }: HomeScreenProps) {
         </footer>
       </main>
     </div>
-  )
+  );
 }
