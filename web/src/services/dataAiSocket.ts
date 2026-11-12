@@ -8,9 +8,12 @@ export type SocketState =
   | 'reconnecting'
   | 'disconnected';
 
-export const DATA_AI_WS_URL = (
-  import.meta.env.VITE_DATA_AI_WS_URL ?? ''
-).trim();
+const defaultWsUrl =
+  `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//` +
+  `${window.location.host}/ws`;
+
+export const DATA_AI_WS_URL =
+  (import.meta.env.VITE_DATA_AI_WS_URL ?? '').trim() || defaultWsUrl;
 
 interface SocketOptions {
   onEvent: (event: DataAiEvent) => void;

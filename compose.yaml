@@ -1,35 +1,56 @@
-# La stack de développement. Versions figées : les mêmes qu'en production.
-name: hackathon
+name: accordel
 
 services:
-  # Le poste de travail : VS Code s'y attache, on y lance l'API et le front
-  dev:
+  web:
     build:
       context: .
       dockerfile: .devcontainer/Dockerfile
-    command: sleep infinity
+    working_dir: /workspace
+    command: >
+      sh -c "npm ci &&
+             npm run dev -w web -- --host 0.0.0.0"
     volumes:
-      - .:/workspace:cached
-    extra_hosts:
-      # Rend l'hôte joignable sous Linux (Docker Desktop le fait déjà)
-      - host.docker.internal:host-gateway
+      - .:/workspace
+      - node_modules:/workspace/node_modules
+    ports:
+      - '5173:5173'
     depends_on:
-      db:
-        condition: service_healthy
+      - backend
+      - ai-ws
 
-  db:
-    image: postgres:17
+  backend:
     environment:
-      POSTGRES_USER: app
-      POSTGRES_PASSWORD: app
-      POSTGRES_DB: app
+      PYTHONPATH: /workspace/backend
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    working_dir: /workspace
+    command: >
+      uvicorn backend.entrypoints.http_api:app
+      --host 0.0.0.0
+      --port 8000
+      --reload
     volumes:
-      # Les données, dans un dossier du projet (ignoré par git)
-      - ./db/data:/var/lib/postgresql/data
-      # Schéma et données de test, joués au premier démarrage
-      - ./db/init:/docker-entrypoint-initdb.d:ro
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U app -d app']
-      interval: 5s
-      timeout: 3s
-      retries: 10
+      - ./backend:/workspace/backend
+    ports:
+      - '8000:8000'
+
+  ai-ws:
+    environment:
+      PYTHONPATH: /workspace/backend
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    working_dir: /workspace
+    command: >
+      uvicorn backend.entrypoints.websocket_api:app
+      --host 0.0.0.0
+      --port 8001
+      --reload
+    volumes:
+      - ./backend:/workspace/backend
+    ports:
+      - '8001:8001'
+
+volumes:
+  node_modules:
