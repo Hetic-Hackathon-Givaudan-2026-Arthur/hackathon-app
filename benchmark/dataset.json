@@ -1,0 +1,302 @@
+[
+  {
+    "id": "t01",
+    "theme": "identite_visuelle",
+    "transcript": "On cherche quelque chose de très épuré, presque minimaliste. Des tons crème et ivoire, des matières naturelles, du lin, du coton brut. L'idée c'est de transmettre la pureté, le naturel, sans artifice.",
+    "expected": {
+      "idea": "Identité visuelle épurée et naturelle",
+      "details": [
+        "Tons crème et ivoire",
+        "Matières naturelles comme le lin et le coton brut",
+        "Style minimaliste sans artifice",
+        "Transmission de la pureté"
+      ],
+      "visual_keywords": ["crème", "ivoire", "lin", "coton", "minimaliste", "naturel", "épuré"]
+    }
+  },
+  {
+    "id": "t02",
+    "theme": "identite_visuelle",
+    "transcript": "Je veux quelque chose de très luxueux, haut de gamme. Du noir profond, du doré, des reflets nacrés. On pense à un flacon de parfum premium, à la joaillerie, à la haute couture parisienne.",
+    "expected": {
+      "idea": "Identité visuelle luxueuse et premium",
+      "details": [
+        "Palette noir profond et doré",
+        "Reflets nacrés",
+        "Références à la joaillerie et haute couture",
+        "Positionnement haut de gamme"
+      ],
+      "visual_keywords": ["noir", "doré", "nacré", "luxe", "joaillerie", "premium", "haute couture"]
+    }
+  },
+  {
+    "id": "t03",
+    "theme": "identite_visuelle",
+    "transcript": "On veut quelque chose de frais et vivant. Des verts végétaux, des textures de feuilles, de mousse. L'image d'une forêt après la pluie, l'humidité, la chlorophylle.",
+    "expected": {
+      "idea": "Identité visuelle fraîche et végétale",
+      "details": [
+        "Tons verts végétaux",
+        "Textures de feuilles et de mousse",
+        "Évocation de la forêt après la pluie",
+        "Sentiment d'humidité et de fraîcheur"
+      ],
+      "visual_keywords": ["vert", "végétal", "feuilles", "mousse", "forêt", "fraîcheur", "chlorophylle"]
+    }
+  },
+  {
+    "id": "t04",
+    "theme": "identite_visuelle",
+    "transcript": "L'univers qu'on veut créer c'est solaire, estival. Du safran, du curcuma, des oranges vifs. Des épices du marché, des tissus colorés, l'ambiance d'un souk méditerranéen.",
+    "expected": {
+      "idea": "Identité visuelle solaire et épicée",
+      "details": [
+        "Couleurs safran et curcuma",
+        "Oranges et jaunes vifs",
+        "Références aux épices de marché",
+        "Ambiance souk méditerranéen"
+      ],
+      "visual_keywords": ["safran", "curcuma", "orange", "épices", "méditerranéen", "souk", "solaire"]
+    }
+  },
+  {
+    "id": "t05",
+    "theme": "identite_visuelle",
+    "transcript": "On recherche quelque chose de très doux, féminin, romantique. Des roses poudré, des lilas, des voiles transparents. L'univers d'une chambre à l'aube, léger, délicat, presque évanescent.",
+    "expected": {
+      "idea": "Identité visuelle douce et romantique",
+      "details": [
+        "Tons rose poudré et lilas",
+        "Matières légères et transparentes",
+        "Atmosphère délicate à l'aube",
+        "Caractère évanescent et féminin"
+      ],
+      "visual_keywords": ["rose", "poudré", "lilas", "voile", "délicat", "romantique", "évanescent"]
+    }
+  },
+  {
+    "id": "t06",
+    "theme": "notes_olfactives",
+    "transcript": "La vanille est au cœur de la composition. Une vanille charnue, presque sucrée, avec une note boisée en fond. On pense à une gousse de vanille fraîche de Madagascar, chaleureuse, enveloppante.",
+    "expected": {
+      "idea": "Note olfactive principale : vanille charnue et boisée",
+      "details": [
+        "Vanille charnue et sucrée en note de cœur",
+        "Fond boisé",
+        "Référence à la vanille de Madagascar",
+        "Caractère chaud et enveloppant"
+      ],
+      "visual_keywords": ["vanille", "gousse", "boisé", "Madagascar", "chaleur", "sucré", "enveloppant"]
+    }
+  },
+  {
+    "id": "t07",
+    "theme": "notes_olfactives",
+    "transcript": "Ce qu'on cherche c'est une fraîcheur aquatique, marine. Des notes d'embruns, de sel, d'algues. Comme une brise sur une falaise en Bretagne, avec un peu d'iode dans l'air.",
+    "expected": {
+      "idea": "Note olfactive fraîche et marine",
+      "details": [
+        "Embruns et notes marines",
+        "Sel et algues",
+        "Référence à la Bretagne",
+        "Touche d'iode"
+      ],
+      "visual_keywords": ["marin", "embruns", "sel", "algues", "iode", "Bretagne", "aquatique"]
+    }
+  },
+  {
+    "id": "t08",
+    "theme": "notes_olfactives",
+    "transcript": "On veut travailler le musc, quelque chose de très proche de la peau. Un musc blanc, propre, légèrement poudreux. Cette sensation de peau chaude après une journée ensoleillée.",
+    "expected": {
+      "idea": "Note olfactive de musc blanc poudré",
+      "details": [
+        "Musc blanc et propre",
+        "Effet poudreux",
+        "Sensation de peau chaude",
+        "Sensualité solaire"
+      ],
+      "visual_keywords": ["musc", "blanc", "poudré", "peau", "chaleur", "sensuel", "propre"]
+    }
+  },
+  {
+    "id": "t09",
+    "theme": "notes_olfactives",
+    "transcript": "Le cèdre et le vétiver forment la base. C'est une base sèche, terreuse, presque fumée. On pense à une forêt de pins, à la résine, à l'automne, aux sous-bois.",
+    "expected": {
+      "idea": "Base boisée et terreuse au cèdre et vétiver",
+      "details": [
+        "Cèdre et vétiver en note de fond",
+        "Caractère sec et terreux",
+        "Touche fumée",
+        "Évocation des sous-bois en automne"
+      ],
+      "visual_keywords": ["cèdre", "vétiver", "boisé", "terreux", "fumé", "sous-bois", "automne"]
+    }
+  },
+  {
+    "id": "t10",
+    "theme": "notes_olfactives",
+    "transcript": "On veut travailler la rose, mais une rose qui n'est pas trop fleurie, pas too much. Une rose modernisée, avec un aspect cuir, un peu froid, presque métallique.",
+    "expected": {
+      "idea": "Rose modernisée aux accents cuirés",
+      "details": [
+        "Rose comme note principale",
+        "Aspect cuir et froid",
+        "Touche métallique",
+        "Interprétation contemporaine de la rose"
+      ],
+      "visual_keywords": ["rose", "cuir", "métallique", "moderne", "floral", "froid", "contemporain"]
+    }
+  },
+  {
+    "id": "t11",
+    "theme": "ambiance_emotion",
+    "transcript": "L'émotion qu'on veut transmettre c'est la nostalgie douce. Comme un souvenir d'enfance, une vieille photo sépia, les odeurs d'une maison de famille. Quelque chose de chaleureux et de mélancolique à la fois.",
+    "expected": {
+      "idea": "Ambiance de nostalgie douce et chaleureuse",
+      "details": [
+        "Sentiment nostalgique",
+        "Références à l'enfance",
+        "Esthétique sépia et vintage",
+        "Mélange de chaleur et mélancolie"
+      ],
+      "visual_keywords": ["nostalgie", "sépia", "vintage", "enfance", "chaleur", "mélancolie", "souvenir"]
+    }
+  },
+  {
+    "id": "t12",
+    "theme": "ambiance_emotion",
+    "transcript": "On cherche quelque chose de très énergique, dynamique, urban. Des flashs de lumière, des néons, la ville la nuit. L'adrénaline d'une grande métropole, Tokyo ou New York.",
+    "expected": {
+      "idea": "Ambiance urbaine nocturne et énergique",
+      "details": [
+        "Énergie dynamique et urbaine",
+        "Lumières néon nocturnes",
+        "Référence à Tokyo ou New York",
+        "Sensation d'adrénaline métropolitaine"
+      ],
+      "visual_keywords": ["néon", "nuit", "urbain", "Tokyo", "New York", "énergie", "métropole"]
+    }
+  },
+  {
+    "id": "t13",
+    "theme": "ambiance_emotion",
+    "transcript": "Ce qu'on veut c'est la sérénité absolue. Un lac de montagne au petit matin, le silence, le brouillard léger sur l'eau. Une ambiance méditative, zen, presque immobile.",
+    "expected": {
+      "idea": "Ambiance de sérénité et méditation alpine",
+      "details": [
+        "Lac de montagne au petit matin",
+        "Silence et brouillard",
+        "Atmosphère méditative et zen",
+        "Immobilité apaisante"
+      ],
+      "visual_keywords": ["lac", "montagne", "brouillard", "silence", "zen", "sérénité", "méditation"]
+    }
+  },
+  {
+    "id": "t14",
+    "theme": "ambiance_emotion",
+    "transcript": "On veut quelque chose de très sensuel, intime. La chaleur d'une pièce tamisée, des bougies, des draps en soie, une atmosphère feutrée. Du Marrakech, de l'orient, des riads.",
+    "expected": {
+      "idea": "Ambiance intime et orientale sensuelle",
+      "details": [
+        "Atmosphère tamisée et intime",
+        "Références aux bougies et soie",
+        "Inspiration Marrakech et riads",
+        "Chaleur orientale feutrée"
+      ],
+      "visual_keywords": ["bougie", "soie", "Marrakech", "riad", "oriental", "sensuel", "intime"]
+    }
+  },
+  {
+    "id": "t15",
+    "theme": "ambiance_emotion",
+    "transcript": "L'ambiance doit être légère, aérienne, presque enfantine. Des bulles de savon dans la lumière, des cerfs-volants, un pré au printemps. Quelque chose d'insouciant et de joyeux.",
+    "expected": {
+      "idea": "Ambiance légère et joyeuse printanière",
+      "details": [
+        "Légèreté et aspect aérien",
+        "Images de bulles et cerfs-volants",
+        "Printemps et pré fleuri",
+        "Insouciance et joie"
+      ],
+      "visual_keywords": ["bulles", "cerf-volant", "printemps", "pré", "légèreté", "joyeux", "aérien"]
+    }
+  },
+  {
+    "id": "t16",
+    "theme": "references_culturelles",
+    "transcript": "On s'inspire du Japon, de l'esthétique wabi-sabi. L'imperfection comme beauté, la poterie craquelée, les fleurs de cerisier qui tombent, l'éphémère comme valeur.",
+    "expected": {
+      "idea": "Esthétique japonaise wabi-sabi et éphémère",
+      "details": [
+        "Inspiration wabi-sabi japonais",
+        "Beauté de l'imperfection",
+        "Références à la poterie craquelée",
+        "Fleurs de cerisier et éphémère"
+      ],
+      "visual_keywords": ["wabi-sabi", "Japon", "cerisier", "poterie", "imperfection", "éphémère", "zen"]
+    }
+  },
+  {
+    "id": "t17",
+    "theme": "references_culturelles",
+    "transcript": "On veut s'ancrer dans le terroir français, l'artisanat provençal. La lavande, la pierre de Bourgogne, les marchés du sud, les céramiques peintes à la main. Quelque chose d'authentique et de local.",
+    "expected": {
+      "idea": "Identité ancrée dans l'artisanat provençal français",
+      "details": [
+        "Référence à la lavande et à la Provence",
+        "Pierre de Bourgogne et matériaux naturels",
+        "Marchés du sud et céramiques artisanales",
+        "Authenticité et ancrage local"
+      ],
+      "visual_keywords": ["lavande", "Provence", "artisanat", "céramique", "pierre", "terroir", "authentique"]
+    }
+  },
+  {
+    "id": "t18",
+    "theme": "references_culturelles",
+    "transcript": "On s'inspire des grandes explorations, des cartes anciennes, des cabinets de curiosités. Le cuir vieilli, les boussoles, les atlas. L'esprit aventurier d'un explorateur du XIXe siècle.",
+    "expected": {
+      "idea": "Univers d'exploration et de curiosité scientifique",
+      "details": [
+        "Inspiration des grandes explorations",
+        "Références aux cartes anciennes et atlas",
+        "Cuir vieilli et instruments de navigation",
+        "Esprit XIXe siècle aventurier"
+      ],
+      "visual_keywords": ["exploration", "carte", "cuir", "boussole", "atlas", "aventurier", "XIXe"]
+    }
+  },
+  {
+    "id": "t19",
+    "theme": "references_culturelles",
+    "transcript": "L'univers de référence c'est la Scandinavie, le design nordique. Bois clair, lignes épurées, fonctionnalité et beauté. Hygge, la chaleur d'une maison en hiver, les bougies, la laine.",
+    "expected": {
+      "idea": "Esthétique nordique et concept du hygge",
+      "details": [
+        "Design scandinave minimaliste",
+        "Bois clair et lignes épurées",
+        "Concept du hygge hivernal",
+        "Matières douces : bougies et laine"
+      ],
+      "visual_keywords": ["scandinave", "nordique", "bois", "hygge", "minimaliste", "laine", "bougie"]
+    }
+  },
+  {
+    "id": "t20",
+    "theme": "references_culturelles",
+    "transcript": "On pense à l'Afrique de l'ouest, aux tissus wax colorés, aux bijoux en bronze, aux percussions. Des couleurs intenses et chaudes, une énergie vitale, quelque chose de profondément vivant.",
+    "expected": {
+      "idea": "Inspiration Afrique de l'ouest, vibrant et coloré",
+      "details": [
+        "Tissus wax aux motifs colorés",
+        "Bijoux en bronze artisanaux",
+        "Énergie rythmique et vitale",
+        "Palette de couleurs intenses et chaudes"
+      ],
+      "visual_keywords": ["wax", "bronze", "Afrique", "coloré", "percussions", "vibrant", "énergie"]
+    }
+  }
+]
