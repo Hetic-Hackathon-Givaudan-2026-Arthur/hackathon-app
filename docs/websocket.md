@@ -5,24 +5,19 @@
 Connexion :
 
 ```text
-/ws/analyse
+/ws/{session_id}
 ```
 
 Le client envoie un objet JSON contenant exactement :
 
 ```json
 {
-  "type": "transcript",
-  "segmentId": "segment-001",
-  "text": "Transcription du segment",
-  "isFinal": true,
-  "sessionId": "session-123",
-  "segmentId": "segment-001"
+  "segment_id": "segment_001",
+  "text": "Transcription du segment"
 }
 ```
 
-`type` doit être `transcript`. `text`, `sessionId` et `segmentId` sont
-obligatoires et ne peuvent pas être vides. `isFinal` est obligatoire.
+`segment_id` et `text` sont obligatoires et ne peuvent pas être vides.
 Les champs supplémentaires sont refusés.
 
 ## Erreurs de réception

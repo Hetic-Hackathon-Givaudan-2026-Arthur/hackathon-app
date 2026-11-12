@@ -11,11 +11,8 @@ class SegmentPayload(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    type: str = Field(pattern="^transcript$")
+    segment_id: str = Field(min_length=1)
     text: str = Field(min_length=1)
-    is_final: bool = Field(alias="isFinal")
-    session_id: str = Field(alias="sessionId", min_length=1)
-    segment_id: str = Field(alias="segmentId", min_length=1)
 
 
 def _invalid_segment_message(code: str, message: str) -> dict[str, str]:
@@ -35,9 +32,10 @@ def get_orchestrator(websocket: WebSocket) -> Orchestrator:
     return orchestrator
 
 
-@app.websocket("/ws/analyse")
+@app.websocket("/ws/{session_id}")
 async def websocket_endpoint(
     websocket: WebSocket,
+    session_id: str,
     orchestrator: Orchestrator = Depends(get_orchestrator),
 ):
     """Receive segments, validate them, and forward internal commands."""
@@ -61,10 +59,7 @@ async def websocket_endpoint(
                 continue
 
             command = IngestSegmentCommand(
-                session_id=payload.session_id,
-                segment_id=payload.segment_id,
-                text=payload.text,
-                is_final=payload.is_final,
+                session_id=session_id, segment_id=payload.segment_id, text=payload.text
             )
             await orchestrator.handle(command)
     except WebSocketDisconnect:
