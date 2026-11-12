@@ -26,9 +26,8 @@ class Orchestrator:
         self._batches: dict[str, Batch] = {}
 
     async def handle(self, command: IngestSegmentCommand) -> None:
-        """Analyze a ready batch, deliver text, then enqueue visual work."""
         batch = self._batch_policy.accumulate(self._batches, command)
-        if not self._batch_policy.should_flush(batch, command.is_final):
+        if not self._batch_policy.should_flush(batch):
             return
 
         result = await self._analysis_model.analyze(batch)

@@ -23,21 +23,15 @@ Dans VS Code, sélectionner Dev Containers: Reopen in Container.
 Dans le terminal du Dev Container :
 
 ```bash
-cp -n backend/.env.example backend/.env
+cp -n api/.env.example api/.env
 ```
 
 ```bash
 npm run dev
 ```
 
-Dans un second terminal du Dev Container :
-
-```bash
-cd backend && python -m pip install -r requirements.txt && python -m uvicorn main:app --host 0.0.0.0 --port 8000
-```
-
 Ouvrir ensuite :
 
 Application web : http://localhost:5173
 
-Backend : http://localhost:8000/health
+API : http://localhost:3000/api/health

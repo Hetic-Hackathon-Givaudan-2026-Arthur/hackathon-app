@@ -6,4 +6,3 @@ class IngestSegmentCommand:
     session_id: str
     segment_id: str
     text: str
-    is_final: bool = False

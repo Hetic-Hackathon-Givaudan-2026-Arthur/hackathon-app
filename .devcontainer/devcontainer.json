@@ -30,11 +30,11 @@
     }
   },
 
-  // Le backend Python et le front, accessibles depuis votre navigateur
-  "forwardPorts": [8000, 5173],
+  // L'API et le front, accessibles depuis votre navigateur
+  "forwardPorts": [3000, 5173],
 
   "portsAttributes": {
-    "8000": {
+    "3000": {
       "label": "Backend API"
     },
     "5173": {
@@ -43,5 +43,5 @@
     }
   },
 
-  "postCreateCommand": "git config --global --add safe.directory /workspace && npm ci && npm ci --prefix web && python -m pip install -r backend/requirements.txt && (test -f backend/.env || cp backend/.env.example backend/.env)"
+  "postCreateCommand": "git config --global --add safe.directory /workspace && npm ci && npm ci --prefix web && (test -f api/.env || cp api/.env.example api/.env)"
 }
