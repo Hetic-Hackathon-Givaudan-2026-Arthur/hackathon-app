@@ -1,9 +1,10 @@
-from fastapi import Depends, FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, Depends, FastAPI, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from application.commands import IngestSegmentCommand
 from application.orchestrator import Orchestrator
 
 app = FastAPI()
+router = APIRouter()
 
 
 class SegmentPayload(BaseModel):
@@ -35,7 +36,12 @@ def get_orchestrator(websocket: WebSocket) -> Orchestrator:
     return orchestrator
 
 
-@app.websocket("/ws/analyse")
+def configure_orchestrator(orchestrator: Orchestrator) -> None:
+    """Register the orchestrator assembled by the composition layer."""
+    app.state.orchestrator = orchestrator
+
+
+@router.websocket("/ws/analyse")
 async def websocket_endpoint(
     websocket: WebSocket,
     orchestrator: Orchestrator = Depends(get_orchestrator),

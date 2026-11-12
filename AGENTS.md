@@ -21,7 +21,7 @@ Hackaton App est un projet développé avec Docker Compose et un Dev Container V
 - Consulter le ticket associé avec `gh issue view N`. Conserver les plans dans le ticket et les brouillons Markdown dans `.scratch/`, ignoré par Git.
 - Toute modification de code, d'architecture, de dépendance, de contrat ou de configuration doit répondre à une requête explicite de l'utilisateur ou du ticket associé.
 - Toute supposition fonctionnelle ou technique non vérifiable doit d'abord faire l'objet d'une requête de clarification avant d'être implémentée.
-- Chaque itération doit être indiqué dans un fichier CHANGELOG qui indiquera la modification faite, lui attribuant un id
+- Chaque itération doit être indiqué dans le fichier CHANGELOG qui indiquera la modification faite, lui attribuant un id, ainsi que de tests simples. Elle doit s'ajouter à tout les logs précédents
 - Chaque fonction doit etre expliquée par des commentaires sur l'utilité de la fonction
 
 ## Backend Python

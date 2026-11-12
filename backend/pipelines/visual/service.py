@@ -26,6 +26,7 @@ class VisualPipelineService:
         self._task_queue = task_queue
 
     async def run(self, task: VisualTask) -> None:
+        """Build, search, deliver, and acknowledge one visual task."""
         query = await self._visual_model.build_query(task.context)
         references = await self._rag.retrieve(query)
         images = await self._image_search.search(query, references)
