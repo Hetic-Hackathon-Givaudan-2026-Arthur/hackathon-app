@@ -24,6 +24,9 @@
 - [VECTOR-004] Full pipeline test passed analysis and object-store vector search, but stopped because the bucket contained no indexed images.
 - [VECTOR-005] Wired LLM 2 to Ollama Qwen 2.5 1.5B and corrected S3 prefix after discovering images in the bucket root.
 - [VECTOR-005] Retested using bucket `hackathon` and prefix `uploads/`; vector search found zero images, so no visual result was emitted.
+- [VECTOR-006] Defaulted image discovery to the observed S3 bucket root and disabled Mimo reasoning for faster captions.
+- Test: `python -m unittest discover -s tests -p "test_image_pipeline.py"` passed (3 tests); full WebSocket-to-image simulation passed with 5 segments and 10 delivered S3 images (516,924 bytes).
+- [VECTOR-007] Return only the image with the highest vector-similarity score.
 
 ## 2026-11-12
 

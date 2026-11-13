@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import AsyncMock, patch
 
 from domain.analysis.entities import (
     AnalysisResult,
@@ -113,6 +114,26 @@ class VisualPipelineTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(queue.acknowledged, task.task_id)
 
 
+class OllamaImageCaptionerTest(unittest.IsolatedAsyncioTestCase):
+    """Verify vision captions do not enable extended model reasoning."""
+
+    @patch(
+        "infrastructure.ollama_image_models._post_json",
+        new_callable=AsyncMock,
+    )
+    async def test_caption_disables_reasoning(self, post_json):
+        """Send a non-thinking request to keep image indexing responsive."""
+        from infrastructure.ollama_image_models import OllamaImageCaptioner
+
+        post_json.return_value = {"message": {"content": "A floral image"}}
+        captioner = OllamaImageCaptioner("http://localhost:11434", "mimo-v2.6")
+
+        caption = await captioner.caption(b"image", "image/jpeg")
+
+        self.assertEqual(caption, "A floral image")
+        self.assertFalse(post_json.await_args.args[1]["think"])
+
+
 class InMemoryObjectStore:
     """Provide deterministic image and vector-index objects for catalog tests."""
 
@@ -183,10 +204,12 @@ class S3VectorCatalogTest(unittest.IsolatedAsyncioTestCase):
         query = VisualQuery(analysis_id="analysis_12345678", query="flower perfume")
 
         first_results = await catalog.find(query, [])
+        self.assertEqual(len(first_results), 1)
         self.assertEqual(first_results[0].image_id, "uploads/flower.jpg")
         self.assertEqual(captioner.caption_count, 2)
 
         second_results = await catalog.find(query, [])
+        self.assertEqual(len(second_results), 1)
         self.assertEqual(second_results[0].image_id, "uploads/flower.jpg")
         self.assertEqual(captioner.caption_count, 2)
         self.assertIn("uploads/.image-vectors.json", store.objects)

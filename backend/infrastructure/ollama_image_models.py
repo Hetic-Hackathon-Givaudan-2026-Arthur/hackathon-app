@@ -41,6 +41,7 @@ class OllamaImageCaptioner:
             {
                 "model": self._model,
                 "stream": False,
+                "think": False,
                 "messages": [
                     {
                         "role": "user",

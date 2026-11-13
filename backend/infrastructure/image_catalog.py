@@ -37,7 +37,7 @@ class S3ImageCatalog:
         bucket: str,
         captioner: ImageCaptioner,
         embedder: TextEmbedder,
-        prefix: str = "uploads/",
+        prefix: str = "",
         index_key: str = "uploads/.image-vectors.json",
     ) -> None:
         """Initialize the object store and local Ollama model adapters."""
@@ -66,7 +66,7 @@ class S3ImageCatalog:
                 base_url,
                 os.environ.get("OLLAMA_EMBEDDING_MODEL", "embeddinggemma"),
             ),
-            prefix=os.environ.get("ASSETS_PREFIX", "uploads/"),
+            prefix=os.environ.get("ASSETS_PREFIX", ""),
             index_key=os.environ.get(
                 "ASSETS_VECTOR_INDEX_KEY", "uploads/.image-vectors.json"
             ),
@@ -75,7 +75,7 @@ class S3ImageCatalog:
     async def find(
         self, query: VisualQuery, references: list[str]
     ) -> list[ImageRequest]:
-        """Caption new images, update the S3 vector index, and rank matches."""
+        """Update the S3 vector index and return its highest-scoring image."""
         query_text = " ".join(dict.fromkeys([query.query, *references])).strip()
         if not query_text:
             return []
@@ -89,6 +89,12 @@ class S3ImageCatalog:
             for item in objects
             if _is_image_key(item.get("Key", ""))
         }
+        logger.info(
+            "visual.image_catalog.scanned prefix=%s object_count=%d image_count=%d",
+            self._prefix,
+            len(objects),
+            len(image_keys),
+        )
         stale_keys = set(index) - image_keys
         if stale_keys:
             for key in stale_keys:
@@ -135,7 +141,7 @@ class S3ImageCatalog:
                 source_url=f"s3://{self._bucket}/{key}",
                 content_type=entry["content_type"],
             )
-            for _, key, entry in ranked[:10]
+            for _, key, entry in ranked[:1]
         ]
         logger.info(
             "visual.vector_search.completed indexed_count=%d result_count=%d",
