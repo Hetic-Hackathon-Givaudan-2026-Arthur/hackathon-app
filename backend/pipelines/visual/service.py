@@ -5,7 +5,7 @@ from application.ports.task_queue import TaskQueue
 from domain.analysis.entities import VisualTask, VisualResult
 from domain.events import VisualTaskQueued
 from pipelines.visual.rag import RAGRetriever
-from pipelines.visual.image_search import ImageSearchService
+from pipelines.visual.image_search import ImageFetcher, ImageSearchService
 
 
 class VisualPipelineService:
@@ -14,6 +14,7 @@ class VisualPipelineService:
         visual_model: VisualModel,
         rag: RAGRetriever,
         image_search: ImageSearchService,
+        image_fetcher: ImageFetcher,
         delivery: ResultDelivery,
         publisher: EventPublisher,
         task_queue: TaskQueue,
@@ -21,6 +22,7 @@ class VisualPipelineService:
         self._visual_model = visual_model
         self._rag = rag
         self._image_search = image_search
+        self._image_fetcher = image_fetcher
         self._delivery = delivery
         self._publisher = publisher
         self._task_queue = task_queue
@@ -28,7 +30,8 @@ class VisualPipelineService:
     async def run(self, task: VisualTask) -> None:
         query = await self._visual_model.build_query(task.context)
         references = await self._rag.retrieve(query)
-        images = await self._image_search.search(query, references)
+        requests = await self._image_search.search(query, references)
+        images = [await self._image_fetcher.fetch(request) for request in requests]
 
         result = VisualResult(
             analysis_id=task.analysis_id,

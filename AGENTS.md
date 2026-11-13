@@ -13,6 +13,7 @@ Hackaton App est un projet développé avec Docker Compose et un Dev Container V
 
 ## Règles
 
+- Ne communiquer que la réponse finale après l'exécution de la tâche ; éviter toute conversation intermédiaire ou de partager avec l'utilisateur la pensée, sauf lorsqu'une décision ou clarification est nécessaire. Ne jamais afficher de pensées internes.
 - Respecter les services `dev` et `db` définis dans `compose.yaml`.
 - PostgreSQL utilise l'image `postgres:17`, la base `app` et les identifiants configurés dans `compose.yaml`.
 - Les données PostgreSQL sont persistées dans `db/data/` ; les scripts de `db/init/` ne sont exécutés qu'à la première initialisation d'une base vide.

@@ -19,8 +19,14 @@ services:
       - ai-ws
 
   backend:
+    env_file:
+      - .env
     environment:
       PYTHONPATH: /workspace/backend
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      OLLAMA_VISION_MODEL: ${OLLAMA_VISION_MODEL:-mimo-v2.6}
+      OLLAMA_EMBEDDING_MODEL: ${OLLAMA_EMBEDDING_MODEL:-embeddinggemma}
+      LLM2_MODEL: ${LLM2_MODEL:-qwen2.5:1.5b}
     build:
       context: .
       dockerfile: backend/Dockerfile
@@ -36,8 +42,14 @@ services:
       - '8000:8000'
 
   ai-ws:
+    env_file:
+      - .env
     environment:
       PYTHONPATH: /workspace/backend
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      OLLAMA_VISION_MODEL: ${OLLAMA_VISION_MODEL:-mimo-v2.6}
+      OLLAMA_EMBEDDING_MODEL: ${OLLAMA_EMBEDDING_MODEL:-embeddinggemma}
+      LLM2_MODEL: ${LLM2_MODEL:-qwen2.5:1.5b}
     build:
       context: .
       dockerfile: backend/Dockerfile

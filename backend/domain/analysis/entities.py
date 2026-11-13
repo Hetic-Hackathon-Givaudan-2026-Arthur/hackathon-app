@@ -44,6 +44,13 @@ class ImageRef:
     data: bytes = field(default_factory=bytes)
 
 
+@dataclass(frozen=True)
+class ImageRequest:
+    image_id: str
+    source_url: str
+    content_type: str
+
+
 @dataclass
 class VisualResult:
     analysis_id: str

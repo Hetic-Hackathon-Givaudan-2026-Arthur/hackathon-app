@@ -324,11 +324,21 @@ Rôle de chaque fichier :
 | `pipelines/text/service.py` | Publie rapidement le résultat textuel via la sortie prévue. |
 | `pipelines/visual/service.py` | Exécute la branche visuelle sans bloquer la branche texte. |
 | `pipelines/visual/rag.py` | Recherche les références visuelles à partir du contexte produit par le LLM 2, sans imposer de moteur de stockage. |
-| `pipelines/visual/image_search.py` | Interroge le fournisseur d'images et normalise les résultats retournés. |
+| `pipelines/visual/image_search.py` | Interroge le catalogue vectoriel et retourne les demandes de téléchargement classées par similarité. |
+| `infrastructure/image_catalog.py` | Génère les légendes, embeddings et index vectoriels persistés dans le stockage S3-compatible. |
+| `infrastructure/ollama_image_models.py` | Adapte Ollama pour légender les images et vectoriser les légendes et requêtes textuelles. |
+| `infrastructure/s3_storage.py` | Stocke et récupère les images et autres données dans le stockage S3-compatible. |
+| `infrastructure/s3_image_fetcher.py` | Télécharge depuis S3 les images sélectionnées et les transmet au contrat de livraison. |
 | `infrastructure/redis_streams.py` | Implémente la file durable des tâches visuelles avec Redis Streams. |
 | `infrastructure/outbox.py` | Conserve les résultats à transmettre et permet leur reprise après une déconnexion. |
 | `infrastructure/processing_log.py` | Écrit le journal append-only des étapes, erreurs et reprises du traitement. |
 | `composition/dependencies.py` | Assemble les implémentations concrètes et injecte les dépendances au démarrage. |
+
+Le catalogue d'images génère une légende avec le modèle vision Ollama,
+vectorise cette légende et la requête avec `embeddinggemma`, puis classe
+les images par similarité cosinus. L'index JSON est conservé dans
+`uploads/.image-vectors.json` et recalculé uniquement pour les images
+nouvelles ou modifiées.
 
 Les dossiers `llm1_analysis` et `llm2_visual` contiennent les adaptateurs,
 prompts et schémas propres à chaque modèle. Les règles de corrélation,
