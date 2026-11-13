@@ -10,8 +10,8 @@
     "dev": "concurrently -n api,web \"npm run dev -w api\" \"npm run dev -w web\"",
     "build": "npm run build --workspaces",
     "lint": "eslint .",
-    "format": "prettier --write . '!db/data'",
-    "format:check": "prettier --check . '!db/data'",
+    "format": "prettier --write",
+    "format:check": "prettier --check",
     "prepare": "husky"
   },
   "lint-staged": {
