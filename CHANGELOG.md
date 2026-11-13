@@ -27,6 +27,8 @@
 - [VECTOR-006] Defaulted image discovery to the observed S3 bucket root and disabled Mimo reasoning for faster captions.
 - Test: `python -m unittest discover -s tests -p "test_image_pipeline.py"` passed (3 tests); full WebSocket-to-image simulation passed with 5 segments and 10 delivered S3 images (516,924 bytes).
 - [VECTOR-007] Return only the image with the highest vector-similarity score.
+- [WS-ANALYSE-001] Replaced the per-session WebSocket path with `/ws/analyse`, carried `session_id` in each segment, and connected the visual worker to the same socket.
+- Test: `python -m unittest discover -s tests` passed (5 tests), including five contract-valid input segments and mocked LLM2 → RAG → search → fetch → JSON/binary delivery on one connection.
 
 ## 2026-11-12
 
