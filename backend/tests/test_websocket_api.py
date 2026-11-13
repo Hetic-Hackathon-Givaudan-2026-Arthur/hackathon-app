@@ -1,57 +1,104 @@
 import asyncio
+import json
+import os
 import unittest
 from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 
+from composition.dependencies import build_local_analysis_model
 from entrypoints.websocket_api import create_app, router
 from domain.analysis.entities import ImageRef, ImageRequest, VisualQuery
+from llm.llm1_analysis.service import LLM1AnalysisService
 from pipelines.visual.service import VisualPipelineService
+
+
+class FakeLLM1Client:
+    """Return a structured analysis while capturing the LLM prompt."""
+
+    def __init__(self):
+        """Initialize the prompt capture."""
+        self.messages = []
+
+    async def complete(self, messages):
+        """Return a valid LLM 1 response for the test batch."""
+        self.messages.append(messages)
+        return json.dumps(
+            {
+                "idea": "Qwen analysis",
+                "details": [f"detail {number}" for number in range(1, 6)],
+                "visual_keywords": ["floral"],
+            }
+        )
 
 
 class AnalysisWebSocketContractTest(unittest.TestCase):
     """Verify the single analysis WebSocket request and response contract."""
 
+    def test_analysis_model_uses_configured_qwen_for_llm1(self):
+        """Verify LLM 1 composes Ollama with the configured Qwen model."""
+        with patch.dict(
+            os.environ,
+            {
+                "OLLAMA_BASE_URL": "http://ollama.test",
+                "LLM1_MODEL": "qwen2.5:1.5b",
+            },
+        ):
+            with patch("composition.dependencies.OllamaClient") as client_factory:
+                model = build_local_analysis_model()
+
+        self.assertIsInstance(model, LLM1AnalysisService)
+        client_factory.assert_called_once_with(
+            base_url="http://ollama.test",
+            model="qwen2.5:1.5b",
+        )
+
     def test_analysis_route_accepts_segments_and_returns_text_result(self):
         """Validate five segments, one analysis result, and a queued visual task."""
-        app = create_app(start_visual_worker=False)
         routes = [route.path for route in router.routes]
         self.assertEqual(routes, ["/ws/analyse"])
-
-        with TestClient(app) as client:
-            with client.websocket_connect("/ws/analyse") as websocket:
-                websocket.send_json(
-                    {
-                        "type": "transcript",
-                        "text": "old request format",
-                        "isFinal": True,
-                        "sessionId": "session-1",
-                    }
-                )
-                self.assertEqual(
-                    websocket.receive_json()["code"], "invalid_segment"
-                )
-
-                for number in range(1, 6):
+        client = FakeLLM1Client()
+        with patch("composition.dependencies.OllamaClient", return_value=client):
+            app = create_app(start_visual_worker=False)
+            with TestClient(app) as test_client:
+                with test_client.websocket_connect("/ws/analyse") as websocket:
                     websocket.send_json(
                         {
-                            "session_id": "session-1",
-                            "segment_id": f"segment-{number}",
-                            "text": f"confirmed segment {number}",
+                            "type": "transcript",
+                            "text": "old request format",
+                            "isFinal": True,
+                            "sessionId": "session-1",
                         }
                     )
+                    self.assertEqual(
+                        websocket.receive_json()["code"], "invalid_segment"
+                    )
 
-                result = websocket.receive_json()
-                self.assertEqual(result["event"], "analysis_result")
-                self.assertEqual(result["session_id"], "session-1")
-                self.assertIn("analysis_id", result["analysis"])
-                self.assertEqual(
-                    len(result["analysis"]["text"]["details"]), 5
-                )
+                    for number in range(1, 6):
+                        websocket.send_json(
+                            {
+                                "session_id": "session-1",
+                                "segment_id": f"segment-{number}",
+                                "text": f"confirmed segment {number}",
+                            }
+                        )
+
+                    result = websocket.receive_json()
+                    self.assertEqual(result["event"], "analysis_result")
+                    self.assertEqual(result["session_id"], "session-1")
+                    self.assertEqual(
+                        result["analysis"]["text"]["idea"], "Qwen analysis"
+                    )
+                    self.assertEqual(
+                        len(result["analysis"]["text"]["details"]), 5
+                    )
 
             task = asyncio.run(app.state.task_queue.dequeue())
             self.assertIsNotNone(task)
             self.assertEqual(task.context.session_id, "session-1")
+
+        self.assertEqual(len(client.messages), 1)
+        self.assertIn("confirmed segment 1", client.messages[0][-1]["content"])
 
     def test_visual_result_uses_the_same_analysis_socket(self):
         """Run mocked LLM2, RAG, search, fetch, and delivery in sequence."""
@@ -148,9 +195,15 @@ class AnalysisWebSocketContractTest(unittest.TestCase):
                 task_queue=RecordingQueue(queue),
             )
 
-        with patch(
-            "entrypoints.websocket_api.build_local_visual_pipeline",
-            side_effect=build_pipeline,
+        with (
+            patch(
+                "entrypoints.websocket_api.build_local_visual_pipeline",
+                side_effect=build_pipeline,
+            ),
+            patch(
+                "composition.dependencies.OllamaClient",
+                return_value=FakeLLM1Client(),
+            ),
         ):
             app = create_app()
             with TestClient(app) as client:

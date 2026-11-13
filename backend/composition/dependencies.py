@@ -4,16 +4,17 @@ import logging
 import os
 
 from application.orchestrator import Orchestrator
-from application.ports.analysis_model import AnalysisModel
 from application.ports.result_delivery import ResultDelivery
 from application.ports.task_queue import TaskQueue
-from domain.analysis.entities import AnalysisResult, Batch, VisualTask
+from domain.analysis.entities import VisualTask
 from domain.analysis.policies import BatchPolicy
 from infrastructure.outbox import OutboxDelivery
 from infrastructure.ollama_client import OllamaClient
 from infrastructure.image_catalog import S3ImageCatalog
 from infrastructure.s3_image_fetcher import S3ImageFetcher
 from infrastructure.s3_storage import S3ObjectStore
+from llm.llm1_analysis.adapter import LLM1Adapter
+from llm.llm1_analysis.service import LLM1AnalysisService
 from llm.llm2_visual.adapter import LLM2Adapter
 from llm.llm2_visual.service import LLM2VisualService
 from pipelines.visual.image_search import CatalogImageSearchService
@@ -21,26 +22,6 @@ from pipelines.visual.rag import PassthroughRAGRetriever
 from pipelines.visual.service import VisualPipelineService
 
 logger = logging.getLogger(__name__)
-
-
-class LocalAnalysisModel(AnalysisModel):
-    """Produce deterministic analysis results for local WebSocket simulations."""
-
-    async def analyze(self, batch: Batch) -> AnalysisResult:
-        """Convert the batch segments into the local analysis result."""
-        logger.info(
-            "analysis.started session_id=%s segment_count=%d",
-            batch.session_id,
-            len(batch.segments),
-        )
-        text = " ".join(segment.text for segment in batch.segments)
-        logger.info("analysis.completed session_id=%s", batch.session_id)
-        return AnalysisResult(
-            analysis_id="",
-            session_id=batch.session_id,
-            idea=text,
-            details=[segment.text for segment in batch.segments],
-        )
 
 
 class InMemoryTaskQueue(TaskQueue):
@@ -149,10 +130,10 @@ def build_local_orchestrator(
     task_queue: TaskQueue | None = None,
     result_delivery: ResultDelivery | None = None,
 ) -> Orchestrator:
-    """Compose the dependency-free orchestrator used by the local WebSocket."""
+    """Compose the orchestrator with Qwen-backed LLM 1."""
     logger.info("orchestrator.composed mode=local")
     return Orchestrator(
-        analysis_model=LocalAnalysisModel(),
+        analysis_model=build_local_analysis_model(),
         event_publisher=_NoopPublisher(),
         task_queue=(
             task_queue if task_queue is not None else InMemoryTaskQueue()
@@ -164,6 +145,15 @@ def build_local_orchestrator(
         ),
         batch_policy=BatchPolicy(),
     )
+
+
+def build_local_analysis_model() -> LLM1AnalysisService:
+    """Compose LLM 1 with the configured Ollama Qwen model."""
+    client = OllamaClient(
+        base_url=os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434"),
+        model=os.environ.get("LLM1_MODEL", "qwen2.5:1.5b"),
+    )
+    return LLM1AnalysisService(LLM1Adapter(client))
 
 
 def build_local_visual_model() -> LLM2VisualService:

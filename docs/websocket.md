@@ -25,6 +25,9 @@ Les trois champs sont obligatoires et non vides. Les champs supplémentaires
 sont refusés. Les segments sont regroupés par session ; cinq segments
 déclenchent une analyse.
 
+L'analyse utilise le service LLM 1 via Ollama. `LLM1_MODEL` permet de choisir
+le modèle ; sa valeur par défaut est `qwen2.5:1.5b`.
+
 ## Erreurs
 
 ```json

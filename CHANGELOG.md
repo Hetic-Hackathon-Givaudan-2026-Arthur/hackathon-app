@@ -29,6 +29,8 @@
 - [VECTOR-007] Return only the image with the highest vector-similarity score.
 - [WS-ANALYSE-001] Replaced the per-session WebSocket path with `/ws/analyse`, carried `session_id` in each segment, and connected the visual worker to the same socket.
 - Test: `python -m unittest discover -s tests` passed (5 tests), including five contract-valid input segments and mocked LLM2 → RAG → search → fetch → JSON/binary delivery on one connection.
+- [LLM1-QWEN-001] Replaced the deterministic WebSocket analysis model with the configured Ollama-backed LLM 1 service, defaulting to Qwen 2.5 1.5B.
+- Test: backend unittest suite passed (6 tests); local Qwen smoke test returned an idea and 3 analysis details.
 
 ## 2026-11-12
 
