@@ -302,7 +302,7 @@ Rôle de chaque fichier :
 |---|---|
 | `entrypoints/websocket_api.py` | Reçoit les segments par WebSocket, valide le format entrant et transmet une commande interne. |
 | `entrypoints/http_api.py` | Expose les éventuels endpoints HTTP nécessaires au service, sans logique métier. |
-| `application/orchestrator.py` | Coordonne le flux complet : analyse, livraison texte et création de la tâche visuelle. |
+| `application/orchestrator.py` | Coordonne le flux complet : analyse, livraison text e et création de la tâche visuelle. |
 | `application/commands.py` | Définit les commandes internes utilisées entre l'entrée et les cas d'usage. |
 | `application/ports/analysis_model.py` | Contrat minimal du LLM 1 chargé de l'analyse textuelle. |
 | `application/ports/visual_model.py` | Contrat minimal du LLM 2 chargé de préparer la recherche visuelle. |

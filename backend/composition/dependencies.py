@@ -1,5 +1,13 @@
+import os
 from collections import deque
 import logging
+
+import redis.asyncio as redis
+from infrastructure.ollama_client import OllamaClient
+from llm.llm1_analysis.adapter import LLM1Adapter
+from llm.llm1_analysis.service import LLM1AnalysisService
+from infrastructure.outbox import OutboxDelivery
+from infrastructure.processing_log import ProcessingLog
 
 from application.orchestrator import Orchestrator
 from application.ports.analysis_model import AnalysisModel
@@ -57,6 +65,12 @@ class InMemoryTaskQueue(TaskQueue):
     async def ack(self, task_id: str) -> None:
         return None
 
+def build_orchestrator(ws_manager, outbox_store, redis_url: str) -> Orchestrator:
+    redis_client = redis.from_url(redis_url)
+    llm_client = OllamaClient(
+        base_url=os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434"),
+        model=os.environ.get("LLM1_MODEL", "qwen2.5:1.5b"),
+    )
 
 class WebSocketManager:
     """Track active WebSockets and deliver analysis events to their sessions."""
