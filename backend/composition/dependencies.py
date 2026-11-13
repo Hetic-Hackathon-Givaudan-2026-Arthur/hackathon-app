@@ -1,4 +1,7 @@
+import os
+
 import redis.asyncio as redis
+from infrastructure.ollama_client import OllamaClient
 from llm.llm1_analysis.adapter import LLM1Adapter
 from llm.llm1_analysis.service import LLM1AnalysisService
 from llm.llm2_visual.adapter import LLM2Adapter
@@ -10,8 +13,12 @@ from application.orchestrator import Orchestrator
 from domain.analysis.policies import BatchPolicy
 
 
-def build_orchestrator(llm_client, ws_manager, outbox_store, redis_url: str) -> Orchestrator:
+def build_orchestrator(ws_manager, outbox_store, redis_url: str) -> Orchestrator:
     redis_client = redis.from_url(redis_url)
+    llm_client = OllamaClient(
+        base_url=os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434"),
+        model=os.environ.get("LLM1_MODEL", "qwen2.5:1.5b"),
+    )
 
     llm1 = LLM1AnalysisService(LLM1Adapter(llm_client))
     llm2 = LLM2VisualService(LLM2Adapter(llm_client))

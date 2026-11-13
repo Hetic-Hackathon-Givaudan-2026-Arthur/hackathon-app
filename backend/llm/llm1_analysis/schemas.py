@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class AnalysisInput(BaseModel):
@@ -9,3 +9,4 @@ class AnalysisInput(BaseModel):
 class AnalysisOutput(BaseModel):
     idea: str
     details: list[str]
+    visual_keywords: list[str] = Field(default_factory=list)
