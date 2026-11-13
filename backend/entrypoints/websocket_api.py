@@ -1,9 +1,13 @@
-from fastapi import Depends, FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, Depends, FastAPI, WebSocket, WebSocketDisconnect
+import logging
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from application.commands import IngestSegmentCommand
 from application.orchestrator import Orchestrator
+from composition.dependencies import WebSocketManager, build_local_orchestrator
 
-app = FastAPI()
+router = APIRouter()
+websocket_manager = WebSocketManager()
+logger = logging.getLogger(__name__)
 
 
 class SegmentPayload(BaseModel):
@@ -32,7 +36,7 @@ def get_orchestrator(websocket: WebSocket) -> Orchestrator:
     return orchestrator
 
 
-@app.websocket("/ws/{session_id}")
+@router.websocket("/ws/{session_id}")
 async def websocket_endpoint(
     websocket: WebSocket,
     session_id: str,
@@ -40,6 +44,7 @@ async def websocket_endpoint(
 ):
     """Receive segments, validate them, and forward internal commands."""
     await websocket.accept()
+    websocket_manager.register(session_id, websocket)
     try:
         while True:
             try:
@@ -61,6 +66,18 @@ async def websocket_endpoint(
             command = IngestSegmentCommand(
                 session_id=session_id, segment_id=payload.segment_id, text=payload.text
             )
+            logger.info(
+                "websocket.segment.received session_id=%s segment_id=%s",
+                session_id,
+                payload.segment_id,
+            )
             await orchestrator.handle(command)
     except WebSocketDisconnect:
         pass
+    finally:
+        websocket_manager.unregister(session_id)
+
+
+app = FastAPI()
+app.state.orchestrator = build_local_orchestrator(websocket_manager)
+app.include_router(router)

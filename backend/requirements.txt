@@ -1,5 +1,2 @@
 fastapi
 uvicorn[standard]
-boto3
-psycopg[binary]
-python-dotenv
